@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://World/DirtTileset.png" type="Texture" id=1]
+[ext_resource path="res://RoadTileMap.gd" type="Script" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 72.33
+height = 269.32
+
+[node name="RoadTileMap" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = SubResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Area2D" type="Area2D" parent="Sprite"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
+shape = SubResource( 2 )
