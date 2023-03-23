@@ -51,3 +51,15 @@ func reload_level():
 func _input(event):
 	if event.is_action_pressed("Change"):
 		reload_level()
+		
+
+
+
+func _on_SpawnTimer_timeout():
+	var monster = Monster.instance()
+	add_child(monster)
+	monster.position = $Spawner.position
+	
+	var area = $Spawner/SpawnArea
+	var position = area.rect_position + Vector2(randf() * area.rect_size.x, randf() * area.rect_size.y)
+	$Spawner.position = position
