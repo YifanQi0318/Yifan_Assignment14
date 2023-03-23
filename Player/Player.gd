@@ -7,6 +7,9 @@ export var MAX_SPEED = 80
 export var ROLL_SPEED = 120
 export var FRICTION = 500
 
+# LEVELING SYSTEM
+export (int) var level = 1
+
 enum {
 	MOVE,
 	ROLL,
@@ -17,6 +20,10 @@ var state = MOVE
 var velocity = Vector2.ZERO
 var roll_vector = Vector2.DOWN
 var stats = PlayerStats
+
+var experience = 0
+var experience_total = 0
+var experience_required = get_required_experience(level + 1)
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
@@ -31,6 +38,28 @@ func _ready():
 	animationTree.active = true
 	swordHitbox.knockback_vector = roll_vector
 
+func get_required_experience(level):
+	return round(pow(level, 1.8) + level * 4)
+
+func gain_experience(amount):
+	experience_total += amount
+	experience += amount
+	var growth_data = []
+	while experience >= experience_required:
+		experience -= experience_required
+		growth_data.append([experience_required, experience_required])
+		level_up()
+	growth_data.append([experience, get_required_experience(level + 1)])
+	emit_signal("experience_gained", growth_data)
+
+func level_up():
+	level += 1
+	experience_required = get_required_experience(level + 1)
+
+	var stats = ['max_hp', 'strength', 'magic']
+	var random_stat = stats[randi() % stats.size()]
+	set(random_stat, get(random_stat) + randi() % 4)
+		
 func _physics_process(delta):
 	match state:
 		MOVE:
@@ -100,3 +129,4 @@ func _on_Hurtbox_invincibility_started():
 
 func _on_Hurtbox_invincibility_ended():
 	blinkAnimationPlayer.play("Stop")
+

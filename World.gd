@@ -4,6 +4,8 @@ const Player = preload("res://Player/Player.tscn")
 const Monster = preload("res://Enemies/Bat.tscn")
 const Exit = preload("res://World/ExitDoor.tscn")
 const Bush = preload("res://World/Bush.tscn")
+onready var _label = $Interface/Label
+onready var _bar = $Interface/ExperienceBar
 
 
 var borders = Rect2(2, 5, 21, 14)
@@ -13,6 +15,7 @@ onready var tileMap = $DirtCliffTileMap
 func _ready():
 	randomize()
 	generate_level()
+	
 
 func generate_level():
 	var walker = Walker.new(Vector2(12, 9), borders)
@@ -51,8 +54,10 @@ func reload_level():
 func _input(event):
 	if event.is_action_pressed("Change"):
 		reload_level()
-		
-
+	if not event.is_action_pressed('ExpChange'):
+		return
+	Player.gain_experience(34)
+	_label.update_text(Player.level, Player.experience, Player.experience_required)
 
 
 func _on_SpawnTimer_timeout():
@@ -63,3 +68,5 @@ func _on_SpawnTimer_timeout():
 	var area = $Spawner/SpawnArea
 	var position = area.rect_position + Vector2(randf() * area.rect_size.x, randf() * area.rect_size.y)
 	$Spawner.position = position
+	
+
