@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal experience_gained(growth_data)
+
 const PlayerHurtSound = preload("res://Player/PlayerHurtSound.tscn")
 
 export var ACCELERATION = 500

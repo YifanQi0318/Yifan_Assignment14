@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 const EnemyDeathEffect = preload("res://Effects/EnemyDeathEffect.tscn")
+const Player = preload("res://Player/Player.tscn")
 
 export var ACCELERATION = 300
 export var MAX_SPEED = 50
@@ -25,6 +26,8 @@ onready var hurtbox = $Hurtbox
 onready var softCollision = $SoftCollision
 onready var wanderController = $WanderController
 onready var animationPlayer = $AnimationPlayer
+onready var _label = $Interface/Label
+onready var _bar = $Interface/ExperienceBar
 
 func _ready():
 	state = pick_random_state([IDLE, WANDER])
@@ -87,6 +90,7 @@ func _on_Stats_no_health():
 	var enemyDeathEffect = EnemyDeathEffect.instance()
 	get_parent().add_child(enemyDeathEffect)
 	enemyDeathEffect.global_position = global_position
+	
 
 func _on_Hurtbox_invincibility_started():
 	animationPlayer.play("Start")
