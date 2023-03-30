@@ -1,10 +1,17 @@
 extends Node2D
 
 const Player = preload("res://Player/Player.tscn")
-const Monster = preload("res://Enemies/Bat.tscn")
+
+const enemy_list = [
+	preload("res://Enemies/Bat.tscn"),
+	preload("res://Enemies/FlyingCreature/FlyingCreature.tscn"),
+	preload("res://Enemies/Goblin/Goblin.tscn"),
+	preload("res://Enemies/Slime/Slime.tscn"),
+	]
 const Exit = preload("res://World/ExitDoor.tscn")
 const Bush = preload("res://World/Bush.tscn")
 
+onready var _character = $PlayerEXP
 onready var _label = $CanvasLayer/Interface/Label
 onready var _bar = $CanvasLayer/Interface/ExperienceBar
 
@@ -13,15 +20,12 @@ var borders = Rect2(2, 5, 21, 14)
 
 onready var tileMap = $DirtCliffTileMap
 
-func UIready():
-	_label.update_text(Player.level, Player.experience, Player.experience_required)
-	_bar.initialize(Player.experience, Player.experience_required)
 	
 func _ready():
 	randomize()
 	generate_level()
-	
-
+	_label.update_text(_character.level, _character.experience, _character.experience_required)
+	_bar.initialize(_character.experience, _character.experience_required)
 
 func generate_level():
 	var walker = Walker.new(Vector2(12, 9), borders)
@@ -31,10 +35,6 @@ func generate_level():
 	add_child(player)
 	player.position = map.front()*45
 	
-	var monster1 = Monster.instance()
-	for n in 8:
-	 add_child(monster1)
-	 monster1.position = map.front()*20
 	
 	var bush = Bush.instance()
 	for n in 8:
@@ -62,18 +62,27 @@ func _input(event):
 		reload_level()
 	if not event.is_action_pressed('ExpChange'):
 		return
-	Player.gain_experience(34)
-	_label.update_text(Player.level, Player.experience, Player.experience_required)
+	_character.gain_experience(10)
+	_label.update_text(_character.level, _character.experience, _character.experience_required)
+
 
 
 func _on_SpawnTimer_timeout():
-	var monster = Monster.instance()
-	add_child(monster)
-	monster.position = $Spawner.position
+	#var monster = Monster.instance()
+	#add_child(monster)
+	#monster.position = $Spawner.position
+	var enemy_spawn = rand_range(0, enemy_list.size())
+	var scene = enemy_list[enemy_spawn].instance()
+	scene.position = $Spawner.position
+	add_child(scene)
+	#var area = $Spawner/SpawnArea
+	#var position = area.rect_position + Vector2(randf() * area.rect_size.x, randf() * area.rect_size.y)
+	#$Spawner.position = position
 	
-	var area = $Spawner/SpawnArea
-	var position = area.rect_position + Vector2(randf() * area.rect_size.x, randf() * area.rect_size.y)
+	var nodes = get_tree().get_nodes_in_group("spawn")
+	var node = nodes[randi()%nodes.size()]
+	
+	var position = node.position
 	$Spawner.position = position
-	
 	
 

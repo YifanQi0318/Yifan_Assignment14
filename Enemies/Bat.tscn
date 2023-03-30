@@ -117,6 +117,7 @@ shape = SubResource( 8 )
 max_health = 2
 
 [node name="PlayerDetectionZone" parent="." instance=ExtResource( 6 )]
+visible = false
 scale = Vector2( 16.44, 12.24 )
 
 [node name="CollisionShape2D" parent="PlayerDetectionZone" index="0"]
