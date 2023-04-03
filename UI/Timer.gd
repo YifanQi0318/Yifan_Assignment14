@@ -14,7 +14,7 @@ func _process(delta):
 	if s >59:
 		m += 1
 		s = 0
-		
+
 	set_text(str(m)+":"+str(s)+":"+str(ms))
 	
 	pass

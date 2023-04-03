@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://UI/GUIDE.png" type="Texture" id=1]
 [ext_resource path="res://World/DirtTileset.png" type="Texture" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://PlayerEXP.tscn" type="PackedScene" id=13]
 [ext_resource path="res://UI/monster.png" type="Texture" id=14]
 [ext_resource path="res://Music and Sounds/BGM.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Node2d.gd" type="Script" id=16]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -617,7 +618,7 @@ margin_top = 5.0
 margin_right = 286.0
 margin_bottom = 45.0
 rect_scale = Vector2( 1.46809, 0.505598 )
-color = Color( 0.984314, 0.976471, 0.976471, 1 )
+color = Color( 0.984314, 0.976471, 0.976471, 0.631373 )
 
 [node name="Back" type="ColorRect" parent="CanvasLayer"]
 modulate = Color( 1, 0.870588, 0.870588, 1 )
@@ -626,9 +627,17 @@ margin_top = 7.0
 margin_right = 288.0
 margin_bottom = 47.0
 rect_scale = Vector2( 1.34672, 0.397288 )
-color = Color( 0.027451, 0.027451, 0.027451, 1 )
+color = Color( 0.027451, 0.027451, 0.027451, 0.627451 )
 
-[node name="TimerCounter" parent="CanvasLayer" instance=ExtResource( 6 )]
+[node name="Node2d" type="Node2D" parent="CanvasLayer"]
+position = Vector2( 257, 9 )
+script = ExtResource( 16 )
+
+[node name="TimerCounter" parent="CanvasLayer/Node2d" instance=ExtResource( 6 )]
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 166.0
+margin_bottom = 59.0
 
 [node name="Interface" type="Control" parent="CanvasLayer"]
 margin_right = 40.0
@@ -693,4 +702,5 @@ position = Vector2( 1191, 623 )
 [node name="Position2D5" type="Position2D" parent="SpawnPosition" groups=["spawn"]]
 position = Vector2( 670, 52 )
 
+[connection signal="experience_gained" from="PlayerEXP" to="CanvasLayer/Interface/ExperienceBar" method="_on_PlayerEXP_experience_gained"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
